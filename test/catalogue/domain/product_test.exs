@@ -154,4 +154,50 @@ defmodule Catalogue.ProductTest do
 
     assert result == {:ok, :description_not_updated}
   end
+
+  test "should apply state when product created" do
+    product_created = %ProductCreated{
+      uuid: "ACC123",
+      name: "some product name",
+      description: "some product description",
+      price: 10.10,
+      stock: 20
+    }
+
+    product = Product.apply(%Product{}, product_created)
+
+    assert product == %Product{
+             uuid: product_created.uuid,
+             name: product_created.name,
+             description: product_created.description,
+             price: product_created.price,
+             stock: product_created.stock
+           }
+  end
+
+  test "should apply state when product name updated" do
+    product_renamed = %ProductRenamed{
+      uuid: "ACC123",
+      previous_name: "some product name",
+      name: "some new product name"
+    }
+
+    existing_product = %Product{
+      uuid: product_renamed.uuid,
+      name: product_renamed.previous_name,
+      description: "some description",
+      price: 10.10,
+      stock: 10
+    }
+
+    product = Product.apply(existing_product, product_renamed)
+
+    assert product == %Product{
+             uuid: product_renamed.uuid,
+             name: product_renamed.name,
+             description: "some description",
+             price: 10.10,
+             stock: 10
+           }
+  end
 end

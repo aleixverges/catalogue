@@ -11,7 +11,7 @@ defmodule Catalogue.Domain.Product do
   alias Catalogue.Domain.Messaging.Event.DescriptionUpdated
 
   def create(%Product{uuid: nil}, uuid, name, description, price, stock) when price > 0
-  do
+    do
     %ProductCreated{
       uuid: uuid,
       name: name,
@@ -22,7 +22,7 @@ defmodule Catalogue.Domain.Product do
   end
 
   def create(%Product{uuid: nil}, _uuid, _name, _description, price, _stock) when price <= 0
-  do
+    do
     {:error, :unable_to_create_product_with_invalid_price}
   end
 
@@ -84,5 +84,29 @@ defmodule Catalogue.Domain.Product do
           description: new_description
         }
     end
+  end
+
+  # state mutators
+
+  def apply(
+        %Product{} = product,
+        %ProductCreated{uuid: uuid, name: name, description: description, price: price, stock: stock}
+      ) do
+
+    %Product{product |
+      uuid: uuid,
+      name: name,
+      description: description,
+      price: price,
+      stock: stock
+    }
+  end
+
+  def apply(
+        %Product{} = product,
+        %ProductRenamed{uuid: uuid, previous_name: previous_name, name: name}
+      ) do
+
+    %Product{product | name: name}
   end
 end
