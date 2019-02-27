@@ -28,6 +28,32 @@ defmodule Catalogue.ProductTest do
            }
   end
 
+  test "should prevent create product with price 0" do
+    product = %Product{}
+    uuid = "ACC123"
+    name = "some product name"
+    description = "some product description"
+    price = 0.0
+    stock = 20
+
+    error = Product.create(product, uuid, name, description, price, stock)
+
+    assert error == {:error, :unable_to_create_product_with_invalid_price}
+  end
+
+  test "should prevent create product with price below zero" do
+    product = %Product{}
+    uuid = "ACC123"
+    name = "some product name"
+    description = "some product description"
+    price = -10.0
+    stock = 20
+
+    error = Product.create(product, uuid, name, description, price, stock)
+
+    assert error == {:error, :unable_to_create_product_with_invalid_price}
+  end
+
   test "should increase stock" do
     product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
     stock_increment = 5

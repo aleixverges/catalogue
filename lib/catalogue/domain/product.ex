@@ -10,7 +10,8 @@ defmodule Catalogue.Domain.Product do
   alias Catalogue.Domain.Messaging.Event.ProductRenamed
   alias Catalogue.Domain.Messaging.Event.DescriptionUpdated
 
-  def create(%Product{uuid: nil}, uuid, name, description, price, stock) do
+  def create(%Product{uuid: nil}, uuid, name, description, price, stock) when price > 0
+  do
     %ProductCreated{
       uuid: uuid,
       name: name,
@@ -18,6 +19,11 @@ defmodule Catalogue.Domain.Product do
       price: price,
       stock: stock
     }
+  end
+
+  def create(%Product{uuid: nil}, _uuid, _name, _description, price, _stock) when price <= 0
+  do
+    {:error, :unable_to_create_product_with_invalid_price}
   end
 
   def increase_stock(product = %Product{}, stock_increment) do
