@@ -48,26 +48,41 @@ defmodule Catalogue.Domain.Product do
   end
 
   def change_price(product = %Product{}, price) do
-    %PriceUpdated{
-      uuid: product.uuid,
-      previous_price: product.price,
-      price: price
-    }
+    cond do
+      product.price == price ->
+        {:ok, :price_not_changed}
+      true ->
+        %PriceUpdated{
+          uuid: product.uuid,
+          previous_price: product.price,
+          price: price
+        }
+    end
   end
 
   def rename(product = %Product{}, new_name) do
-    %ProductRenamed{
-      uuid: product.uuid,
-      previous_name: product.name,
-      name: new_name
-    }
+    cond do
+      product.name == new_name ->
+        {:ok, :name_not_updated}
+      true ->
+        %ProductRenamed{
+          uuid: product.uuid,
+          previous_name: product.name,
+          name: new_name
+        }
+    end
   end
 
   def update_description(product = %Product{}, new_description) do
-    %DescriptionUpdated{
-      uuid: product.uuid,
-      previous_description: product.description,
-      description: new_description
-    }
+    cond do
+      product.description == new_description ->
+        {:ok, :description_not_updated}
+      true ->
+        %DescriptionUpdated{
+          uuid: product.uuid,
+          previous_description: product.description,
+          description: new_description
+        }
+    end
   end
 end

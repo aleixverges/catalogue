@@ -102,6 +102,15 @@ defmodule Catalogue.ProductTest do
            }
   end
 
+  test "should not change the price when existing is the same as the new" do
+    product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
+    new_price = 10.10
+
+    result = Product.change_price(product, new_price)
+
+    assert result == {:ok, :price_not_changed}
+  end
+
   test "should rename product" do
     product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
     new_name = "Some new product name"
@@ -115,6 +124,15 @@ defmodule Catalogue.ProductTest do
            }
   end
 
+  test "product name should not change when changing with the same name" do
+    product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
+    new_name = "some product"
+
+    result = Product.rename(product, new_name)
+
+    assert result == {:ok, :name_not_updated}
+  end
+
   test "should update product description" do
     product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
     new_description = "Some new description"
@@ -126,5 +144,14 @@ defmodule Catalogue.ProductTest do
              previous_description: "some description",
              description: "Some new description"
            }
+  end
+
+  test "product description should not change when changing with the same description" do
+    product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
+    new_description = "some description"
+
+    result = Product.update_description(product, new_description)
+
+    assert result == {:ok, :description_not_updated}
   end
 end
