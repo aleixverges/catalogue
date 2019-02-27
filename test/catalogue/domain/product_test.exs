@@ -54,6 +54,15 @@ defmodule Catalogue.ProductTest do
            }
   end
 
+  test "should fail when trying to decrease stock below zero" do
+    product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 5}
+    stock_decrement = 10
+
+    error = Product.decrease_stock(product, stock_decrement)
+
+    assert error == {:error, :unable_to_decrease_stock_below_zero}
+  end
+
   test "should change product price" do
     product = %Product{uuid: "ACC123", name: "some product", description: "some description", price: 10.10, stock: 10}
     new_price = 15

@@ -29,11 +29,16 @@ defmodule Catalogue.Domain.Product do
   end
 
   def decrease_stock(product = %Product{}, stock_decrement) do
-    %StockDecreased{
-      uuid: product.uuid,
-      previous_stock: product.stock,
-      stock: product.stock - stock_decrement
-    }
+    cond do
+      product.stock < stock_decrement ->
+        {:error, :unable_to_decrease_stock_below_zero}
+      true ->
+        %StockDecreased{
+          uuid: product.uuid,
+          previous_stock: product.stock,
+          stock: product.stock - stock_decrement
+        }
+    end
   end
 
   def change_price(product = %Product{}, price) do
