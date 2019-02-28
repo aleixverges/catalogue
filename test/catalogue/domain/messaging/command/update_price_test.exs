@@ -7,9 +7,9 @@ defmodule Catalogue.Domain.Messaging.Command.UpdatePriceTest do
     uuid = 12345
     price = 10.10
 
-    event = %UpdatePrice{uuid: uuid, price: price}
+    command = %UpdatePrice{uuid: uuid, price: price}
 
-    assert uuid == event.uuid
-    assert price == event.price
+    assert uuid == command.uuid
+    assert price == command.price
   end
 end

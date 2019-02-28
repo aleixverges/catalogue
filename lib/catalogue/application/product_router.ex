@@ -2,7 +2,10 @@ defmodule Catalogue.Application.ProductRouter do
   use Commanded.Commands.Router
 
   alias Catalogue.Domain.Messaging.Command.CreateProduct
-  alias Catalogue.Application.CreateProductHandler
+  alias Catalogue.Domain.Messaging.Command.UpdatePrice
+  alias Catalogue.Application.ProductHandler
 
-  dispatch CreateProduct, to: CreateProductHandler, aggregate: Catalogue.Domain.Product, identity: :uuid
+  identify Catalogue.Domain.Product, by: :uuid
+
+  dispatch [CreateProduct,UpdatePrice], to: ProductHandler, aggregate: Catalogue.Domain.Product
 end

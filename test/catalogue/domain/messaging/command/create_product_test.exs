@@ -10,12 +10,12 @@ defmodule Catalogue.Domain.Messaging.Command.CreateProductTest do
     price = 10.10
     stock = 10
 
-    event = %CreateProduct{uuid: uuid, name: name, description: description, price: price, stock: stock}
+    command = %CreateProduct{uuid: uuid, name: name, description: description, price: price, stock: stock}
 
-    assert uuid == event.uuid
-    assert name == event.name
-    assert description == event.description
-    assert price == event.price
-    assert stock == event.stock
+    assert uuid == command.uuid
+    assert name == command.name
+    assert description == command.description
+    assert price == command.price
+    assert stock == command.stock
   end
 end
