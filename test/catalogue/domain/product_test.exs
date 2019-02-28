@@ -200,4 +200,109 @@ defmodule Catalogue.ProductTest do
              stock: 10
            }
   end
+
+  test "should apply state when product price changed" do
+    price_updated = %PriceUpdated{
+      uuid: "ACC123",
+      previous_price: 10.10,
+      price: 20.10
+    }
+
+    existing_product = %Product{
+      uuid: price_updated.uuid,
+      name: 'some name',
+      description: "some description",
+      price: price_updated.previous_price,
+      stock: 10
+    }
+
+    product = Product.apply(existing_product, price_updated)
+
+    assert product == %Product{
+             uuid: price_updated.uuid,
+             name: 'some name',
+             description: "some description",
+             price: 20.10,
+             stock: 10
+           }
+  end
+
+  test "should apply state when product description updated" do
+    description_updated = %DescriptionUpdated{
+      uuid: "ACC123",
+      previous_description: "some product description",
+      description: "some new product description"
+    }
+
+    existing_product = %Product{
+      uuid: description_updated.uuid,
+      name: 'some name',
+      description: description_updated.previous_description,
+      price: 10.10,
+      stock: 10
+    }
+
+    product = Product.apply(existing_product, description_updated)
+
+    assert product == %Product{
+             uuid: description_updated.uuid,
+             name: 'some name',
+             description: description_updated.description,
+             price: 10.10,
+             stock: 10
+           }
+  end
+
+  test "should apply state when product stock decreased" do
+    stock_decreased = %StockDecreased{
+      uuid: "ACC123",
+      previous_stock: 10,
+      stock: 5
+    }
+
+    existing_product = %Product{
+      uuid: stock_decreased.uuid,
+      name: 'some name',
+      description: "some description",
+      price: 10.10,
+      stock: stock_decreased.previous_stock
+    }
+
+    product = Product.apply(existing_product, stock_decreased)
+
+    assert product == %Product{
+             uuid: stock_decreased.uuid,
+             name: 'some name',
+             description: "some description",
+             price: 10.10,
+             stock: stock_decreased.stock
+           }
+  end
+
+  test "should apply state when product stock increemented" do
+    stock_incremented = %StockIncremented{
+      uuid: "ACC123",
+      previous_stock: 10,
+      stock: 15
+    }
+
+    existing_product = %Product{
+      uuid: stock_incremented.uuid,
+      name: 'some name',
+      description: "some description",
+      price: 10.10,
+      stock: stock_incremented.previous_stock
+    }
+
+    product = Product.apply(existing_product, stock_incremented)
+
+    assert product == %Product{
+             uuid: stock_incremented.uuid,
+             name: 'some name',
+             description: "some description",
+             price: 10.10,
+             stock: stock_incremented.stock
+           }
+  end
+
 end

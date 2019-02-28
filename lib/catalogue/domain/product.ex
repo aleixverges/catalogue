@@ -87,7 +87,6 @@ defmodule Catalogue.Domain.Product do
   end
 
   # state mutators
-
   def apply(
         %Product{} = product,
         %ProductCreated{uuid: uuid, name: name, description: description, price: price, stock: stock}
@@ -108,5 +107,37 @@ defmodule Catalogue.Domain.Product do
       ) do
 
     %Product{product | name: name}
+  end
+
+  def apply(
+        %Product{} = product,
+        %DescriptionUpdated{uuid: _uuid, previous_description: _previous_description, description: description}
+      ) do
+
+    %Product{product | description: description}
+  end
+
+  def apply(
+        %Product{} = product,
+        %PriceUpdated{uuid: _uuid, previous_price: _previous_price, price: new_price}
+      ) do
+
+    %Product{product | price: new_price}
+  end
+
+  def apply(
+        %Product{} = product,
+        %StockDecreased{uuid: _uuid, previous_stock: _previous_stock, stock: new_stock}
+      ) do
+
+    %Product{product | stock: new_stock}
+  end
+
+  def apply(
+        %Product{} = product,
+        %StockIncremented{uuid: _uuid, previous_stock: _previous_stock, stock: new_stock}
+      ) do
+
+    %Product{product | stock: new_stock}
   end
 end
