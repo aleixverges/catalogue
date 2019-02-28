@@ -104,7 +104,7 @@ defmodule Catalogue.Domain.Product do
 
   def apply(
         %Product{} = product,
-        %ProductRenamed{uuid: uuid, previous_name: previous_name, name: name}
+        %ProductRenamed{uuid: _uuid, previous_name: _previous_name, name: name}
       ) do
 
     %Product{product | name: name}
